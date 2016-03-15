@@ -5,8 +5,6 @@ After installation, following properties must be included in **alfresco-global.p
 If you are using **pdfsandwich**
 
 ```
-#!bash
-
 ocr.command=/usr/local/bin/pdfsandwich
 ocr.output.verbose=true
 ocr.output.file.prefix.command=-o
@@ -24,8 +22,6 @@ ocr.pool.thread.priority=5
 If you are using **OCRmyPDF**
 
 ```
-#!bash
-
 ocr.command=/usr/local/bin/ocrmypdf
 ocr.output.verbose=true
 ocr.output.file.prefix.command=
@@ -43,8 +39,6 @@ ocr.pool.thread.priority=5
 If you are using **Windows.OCR**
 
 ```
-#!bash
-
 ocr.url=http://localhost:60064/api/OCR/
 ocr.output.verbose=true
 
