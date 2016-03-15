@@ -1,0 +1,112 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<!DOCTYPE beans PUBLIC '-//SPRING//DTD BEAN//EN' 'http://www.springframework.org/dtd/spring-beans.dtd'>
+
+<beans>
+
+    <bean id="ocr-extract" class="es.keensoft.alfresco.ocr.OCRExtractAction" parent="action-executer" init-method="init">
+        <property name="nodeService" ref="NodeService"/>
+        <property name="contentService" ref="ContentService" />
+    	<property name="transactionService" ref="TransactionService" />
+    	<property name="threadPoolExecutor" ref="ocrActionsThreadPoolExecutor" />
+        <property name="ocrTransformWorker" ref="transformer.worker.OCR" />
+    </bean>
+    
+	<bean id="ocrActionsThreadPoolExecutor" class="org.alfresco.util.ThreadPoolExecutorFactoryBean">
+        <property name="poolName" value="ocrActionsThreadPool" />
+        <!-- Custom parameters to include in alfresco-global.properties -->
+        <property name="corePoolSize" value="${ocr.pool.core.size}" />
+        <property name="maximumPoolSize" value="${ocr.pool.maximum.size}" />
+        <property name="threadPriority" value="${ocr.pool.thread.priority}" />
+    </bean>
+
+	<bean id="transformer.worker.OCR" class="es.keensoft.alfresco.ocr.OCRTransformWorker">
+        <property name="verbose" value="${ocr.output.verbose}" />
+	    <property name="serverOS" value="${ocr.server.os}" />
+		<property name="mimetypeService">
+			<ref bean="mimetypeService" />
+		</property>
+		<!-- Windows: service by URL (non authenticated) -->
+		<property name="executerWindows">
+		    <bean name="transformer.OCR.service" class="es.keensoft.alfresco.ocr.RestClient">
+		        <!-- Custom parameters to include in alfresco-global.properties -->
+		        <property name="url" value="${ocr.url}" />
+		        <property name="commandsAndArguments">
+					<map>
+						<entry key=".*">
+							<list>
+								<value>${ocr.extra.commands}</value>
+								<value>${source}</value>
+								<value>${target}</value>
+							</list>
+						</entry>
+					</map>
+				</property>
+		      
+			</bean>
+		</property>
+		<!-- Linux: command line -->
+		<property name="executerLinux">
+			<bean name="transformer.Tesseract.Command" class="es.keensoft.alfresco.util.exec.RuntimeExecCommandProcessor">
+				<!-- Custom parameters to include in alfresco-global.properties -->
+				<property name="commandsAndArguments">
+					<map>
+						<entry key=".*">
+							<list>
+								<value>${ocr.command}</value>
+								<value>${ocr.extra.commands}</value>
+								<value>${source}</value>
+								<value>${ocr.output.file.prefix.command}</value>
+								<value>${target}</value>
+							</list>
+						</entry>
+					</map>
+				</property>
+				<!-- From original alfresco-global.properties -->
+	            <property name="processProperties"> 
+	               <map>
+	                  <entry key="MAGICK_HOME">
+	                     <value>${img.root}</value>
+	                  </entry>
+	                  <entry key="MAGICK_CODER_MODULE_PATH">
+	                     <value>${img.coders}</value>
+	                  </entry>
+	                  <entry key="MAGICK_CONFIGURE_PATH">
+	                     <value>${img.config}</value>
+	                  </entry>
+	                  <entry key="GS_LIB">
+	                     <value>${img.gslib}</value>
+	                  </entry>
+	                  <entry key="DYLD_LIBRARY_PATH">
+	                     <value>${img.dyn}</value>
+	                  </entry>
+	                  <entry key="LD_LIBRARY_PATH">
+	                     <value>${img.dyn}</value>
+	                  </entry>
+	               </map>
+	            </property>
+	            <property name="defaultProperties">
+	               <props>
+	                  <prop key="options"></prop>
+	               </props>
+	            </property>
+			</bean>
+		</property>
+	
+        <!-- Only applies to command line -->
+		<property name="checkCommand">
+			<bean name="transformer.Tesseract.CheckCommand" class="org.alfresco.util.exec.RuntimeExec">
+				<property name="commandsAndArguments">
+					<map>
+						<entry key=".*">
+							<list>
+								<value>${ocr.command}</value>
+								<value>-version</value>
+							</list>
+						</entry>
+					</map>
+				</property>
+			</bean>
+		</property>
+	</bean>
+
+</beans>
