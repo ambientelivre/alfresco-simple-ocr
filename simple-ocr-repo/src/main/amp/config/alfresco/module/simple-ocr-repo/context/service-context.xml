@@ -6,19 +6,10 @@
     <bean id="ocr-extract" class="es.keensoft.alfresco.ocr.OCRExtractAction" parent="action-executer" init-method="init">
         <property name="nodeService" ref="NodeService"/>
         <property name="contentService" ref="ContentService" />
-    	<property name="transactionService" ref="TransactionService" />
-    	<property name="threadPoolExecutor" ref="ocrActionsThreadPoolExecutor" />
+        <property name="versionService" ref="VersionService" />
         <property name="ocrTransformWorker" ref="transformer.worker.OCR" />
     </bean>
     
-	<bean id="ocrActionsThreadPoolExecutor" class="org.alfresco.util.ThreadPoolExecutorFactoryBean">
-        <property name="poolName" value="ocrActionsThreadPool" />
-        <!-- Custom parameters to include in alfresco-global.properties -->
-        <property name="corePoolSize" value="${ocr.pool.core.size}" />
-        <property name="maximumPoolSize" value="${ocr.pool.maximum.size}" />
-        <property name="threadPriority" value="${ocr.pool.thread.priority}" />
-    </bean>
-
 	<bean id="transformer.worker.OCR" class="es.keensoft.alfresco.ocr.OCRTransformWorker">
         <property name="verbose" value="${ocr.output.verbose}" />
 	    <property name="serverOS" value="${ocr.server.os}" />
