@@ -3,7 +3,8 @@
 
 <beans>
 
-    <bean id="ocr-extract" class="es.keensoft.alfresco.ocr.OCRExtractAction" parent="action-executer" init-method="init">
+    <bean id="ocr-extract" class="es.keensoft.alfresco.ocr.OCRExtractAction" parent="action-executer" 
+          init-method="init" depends-on="simple-ocr-repo_actionResourceBundles">
         <property name="nodeService" ref="NodeService"/>
         <property name="contentService" ref="ContentService" />
         <property name="versionService" ref="VersionService" />
@@ -99,5 +100,5 @@
 			</bean>
 		</property>
 	</bean>
-
+	
 </beans>
