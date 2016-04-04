@@ -33,7 +33,7 @@ Downloading the ready-to-deploy-plugin
 --------------------------------------
 The binary distribution is made of one amp file to be deployed in Share:
 
-* [repo AMP](https://github.com/keensoft/alfresco-simple-ocr/releases/download/1.0.0/alfresco-simple-ocr.amp)
+* [repo AMP](https://github.com/keensoft/alfresco-simple-ocr/releases/download/1.0.0/simple-ocr-repo.amp)
 
 You can install them by using standard [Alfresco deployment tools](http://docs.alfresco.com/community/tasks/dev-extensions-tutorials-simple-module-install-amp.html)
 
