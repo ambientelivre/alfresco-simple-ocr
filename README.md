@@ -44,8 +44,18 @@ If you are new to Alfresco and the Alfresco Maven SDK, you should start by readi
 You can build the artifacts from source code using maven
 ```$ mvn clean package```
 
+Installation
+----------------------
+
+OCR software for Linux depends on programs like `gs` or `ImageMagick`, which are also dependencies for Alfresco. In order to avoid problems, it's recommended to install Alfresco from scratch, letting the OS the installation of the packages. 
+
+You can find detailed instructions to perform Alfresco installation from scratch at [Alfresco Documentation](http://docs.alfresco.com/community/tasks/alf-tomcat-install.html).
+
+If you are using Linux and your Alfresco is installed by using [default wizards](http://docs.alfresco.com/community/concepts/simpleinstalls-community-intro.html), you must pay attention to environment execution for programs launched inside your JVM and you must adjust versions and path precedence.
+
 Configuration
 ----------------------
+
 After installation, following properties must be included in **alfresco-global.properties**
 
 * If you are using **pdfsandwich**
