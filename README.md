@@ -20,7 +20,7 @@ Supported OCR software:
 * [Windows.Media.OCR](https://www.nuget.org/packages/Microsoft.Windows.Ocr/) as local service
 
 **Languages**
-Currently Share interface is provided in English, Spanish and Brazilian Portuguese.
+Currently Share interface is provided in English, Spanish, Brazilian Portuguese and German.
 OCR supported languages catalog depends directly on selected OCR software ([Tesseract OCR](https://github.com/tesseract-ocr) or [Windows.Media.OCR](https://www.nuget.org/packages/Microsoft.Windows.Ocr/))
 
 ***No original Alfresco resources have been overwritten***
