@@ -53,6 +53,8 @@ You can find detailed instructions to perform Alfresco installation from scratch
 
 If you are using Linux and your Alfresco is installed by using [default wizards](http://docs.alfresco.com/community/concepts/simpleinstalls-community-intro.html), you must pay attention to environment execution for programs launched inside your JVM and you must adjust versions and path precedence.
 
+You can find more options to solve this problem at the [FAQ](https://github.com/keensoft/alfresco-simple-ocr/wiki/FAQ) page.
+
 Configuration
 ----------------------
 
