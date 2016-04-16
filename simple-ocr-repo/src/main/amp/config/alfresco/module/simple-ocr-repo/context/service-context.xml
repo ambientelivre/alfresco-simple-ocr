@@ -8,6 +8,7 @@
         <property name="nodeService" ref="NodeService"/>
         <property name="contentService" ref="ContentService" />
         <property name="versionService" ref="VersionService" />
+        <property name="transactionService" ref="TransactionService" />
         <property name="ocrTransformWorker" ref="transformer.worker.OCR" />
     </bean>
     

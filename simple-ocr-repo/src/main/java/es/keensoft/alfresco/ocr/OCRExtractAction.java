@@ -10,6 +10,8 @@ import org.alfresco.model.ContentModel;
 import org.alfresco.repo.action.ParameterDefinitionImpl;
 import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
 import org.alfresco.repo.content.MimetypeMap;
+import org.alfresco.repo.transaction.RetryingTransactionHelper;
+import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.repo.version.VersionModel;
 import org.alfresco.service.cmr.action.Action;
 import org.alfresco.service.cmr.action.ParameterDefinition;
@@ -25,6 +27,7 @@ import org.alfresco.service.cmr.version.VersionService;
 import org.alfresco.service.cmr.version.VersionType;
 import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
+import org.alfresco.service.transaction.TransactionService;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -37,6 +40,7 @@ public class OCRExtractAction extends ActionExecuterAbstractBase {
 	private NodeService nodeService;
 	private ContentService contentService;
 	private VersionService versionService;
+	private TransactionService transactionService;
 	
 	private OCRTransformWorker ocrTransformWorker;
 	
@@ -71,89 +75,112 @@ public class OCRExtractAction extends ActionExecuterAbstractBase {
     			Boolean continueOnError = (Boolean) action.getParameterValue(PARAM_CONTINUE_ON_ERROR);
     		    if (continueOnError == null) continueOnError = true;
     		    
-    		    // Asynchronous executions throw several "controlled" ConcurrencyFailureException,
-    		    // so no error continuation must be allowed
-    		    if (action.getExecuteAsychronously()) {
-    		    	continueOnError = false;
+    		    // # 5 Problem writing OCRed file
+    		    // As action.getExecuteAsychronously() returns always FALSE (it's an Alfresco issue):
+    		    // 1 - Try first with new Transaction 
+    		    // 2 - In case of error, try then with the current Transaction
+    		    try {
+    		        executeInNewTransaction(actionedUponNodeRef, contentData);
+    		    } catch (Throwable throwableNewTransaction) {
+    		    	logger.warn(actionedUponNodeRef + ": " + throwableNewTransaction.getMessage());
+    		    	try {
+    		    		// Current transaction
+    		    	    executeImplInternal(actionedUponNodeRef, contentData);
+    		    	} catch (Throwable throwableCurrentTransaction) {
+    		    		if (continueOnError) {
+    	    		    	logger.warn(actionedUponNodeRef + ": " + throwableNewTransaction.getMessage());
+    		    		} else {
+    		    			throw throwableCurrentTransaction;
+    		    		}
+    		    	}
     		    }
     		    
-    		    try {
-    			
-		    		String originalMimeType = contentData.getMimetype();                    		
-		    		
-		    		ContentReader reader = contentService.getReader(actionedUponNodeRef, ContentModel.PROP_CONTENT);
-		    		
-		    		// Non PDF files (such as images)
-		    		if (!originalMimeType.equals(MimetypeMap.MIMETYPE_PDF)) {
-		    			
-		    		    // Try to transform any format to PDF
-		    	        ContentWriter writer = contentService.getTempWriter();
-		    	        writer.setMimetype(MimetypeMap.MIMETYPE_PDF);
-		    		    contentService.transform(reader, writer);
-		    		    
-		    		    // Set PDF as content reader
-		    		    reader = writer.getReader();
-		    		    
-		    		}
-		    		
-			        ContentWriter writer = contentService.getTempWriter();
-			        writer.setMimetype(MimetypeMap.MIMETYPE_PDF);
-		    		
-		    	    try {
-		    	        ocrTransformWorker.transform(reader, writer, null);
-		    	    } catch (Exception e) {
-		    	    	throw new RuntimeException(e);
-		    	    }
-		    	    
-		    	    // Set initial version if it's a new one
-		            versionService.ensureVersioningEnabled(actionedUponNodeRef, null);
-		    	    if (!versionService.isVersioned(actionedUponNodeRef)) {
-		    	    	Map<String, Serializable> versionProperties = new HashMap<String, Serializable>();
-		    	    	versionProperties.put(Version.PROP_DESCRIPTION, "OCRd");
-		    	    	versionProperties.put(VersionModel.PROP_VERSION_TYPE, VersionType.MINOR);
-		    	    	versionService.createVersion(actionedUponNodeRef, versionProperties);
-		    	    }
-		    	    
-		    	    ContentWriter writeOriginalContent = null;
-		    	    // Update original PDF file
-		    	    if (originalMimeType.equals(MimetypeMap.MIMETYPE_PDF)) {
-		        	    writeOriginalContent = contentService.getWriter(actionedUponNodeRef, ContentModel.PROP_CONTENT, true);
-		    	    } else {
-		    	    	// Create new PDF file
-		    	    	String fileName = nodeService.getProperty(actionedUponNodeRef, ContentModel.PROP_NAME) + ".pdf";
-		    	    	Map<QName, Serializable> props = new HashMap<QName, Serializable>(1);
-		    	        props.put(ContentModel.PROP_NAME, fileName);
-		    	    	NodeRef pdfNodeRef = createNode(nodeService.getPrimaryParent(actionedUponNodeRef).getParentRef(), fileName, props);
-		    	    	writeOriginalContent = contentService.getWriter(pdfNodeRef, ContentModel.PROP_CONTENT, true);
-		    	    	writeOriginalContent.setMimetype(MimetypeMap.MIMETYPE_PDF);
-		    	    }
-		    	    writeOriginalContent.putContent(writer.getReader());    	    
-		    			
-		    	    // Set OCRd aspect to avoid future re-OCR process
-		    	    Map<QName, Serializable> aspectProperties = new HashMap<QName, Serializable>();
-		    	    aspectProperties.put(OCRdModel.PROP_PROCESSED_DATE, new Date());
-					nodeService.addAspect(actionedUponNodeRef, OCRdModel.ASPECT_OCRD, aspectProperties);
-					
-					// Manual versioning because of Alfresco insane rules for first version content nodes
-					versionService.ensureVersioningEnabled(actionedUponNodeRef, null);
-					Map<String, Serializable> versionProperties = new HashMap<String, Serializable>();
-					versionProperties.put(Version.PROP_DESCRIPTION, "OCRd");
-					versionProperties.put(VersionModel.PROP_VERSION_TYPE, VersionType.MINOR);
-			    	versionService.createVersion(actionedUponNodeRef, versionProperties);
-		    	
-    		    } catch (Throwable t) {
-    		        if (continueOnError) {
-    		        	logger.warn(t, t);
-    		        } else {
-    		        	throw new RuntimeException(t);
-    		        }
-    		    }
     		}
 			
 		}
         
 	}
 	
+    // Avoid ConcurrencyFailureException by using RetryingTransactionHelper
+	private void executeInNewTransaction(final NodeRef nodeRef, final ContentData contentData) {
+		
+        RetryingTransactionCallback<Void> callback = new RetryingTransactionCallback<Void>() {
+            @Override
+            public Void execute() throws Throwable {
+		    	executeImplInternal(nodeRef, contentData);
+                return null;
+            }
+        };
+        RetryingTransactionHelper txnHelper = transactionService.getRetryingTransactionHelper();
+        txnHelper.doInTransaction(callback, false, true);
+	}
+	
+	private void executeImplInternal(NodeRef actionedUponNodeRef, ContentData contentData) {
+		
+		String originalMimeType = contentData.getMimetype();                    		
+		
+		ContentReader reader = contentService.getReader(actionedUponNodeRef, ContentModel.PROP_CONTENT);
+		
+		// Non PDF files (such as images)
+		if (!originalMimeType.equals(MimetypeMap.MIMETYPE_PDF)) {
+			
+		    // Try to transform any format to PDF
+	        ContentWriter writer = contentService.getTempWriter();
+	        writer.setMimetype(MimetypeMap.MIMETYPE_PDF);
+		    contentService.transform(reader, writer);
+		    
+		    // Set PDF as content reader
+		    reader = writer.getReader();
+		    
+		}
+		
+        ContentWriter writer = contentService.getTempWriter();
+        writer.setMimetype(MimetypeMap.MIMETYPE_PDF);
+		
+	    try {
+	        ocrTransformWorker.transform(reader, writer, null);
+	    } catch (Exception e) {
+	    	throw new RuntimeException(e);
+	    }
+	    
+	    // Set initial version if it's a new one
+        versionService.ensureVersioningEnabled(actionedUponNodeRef, null);
+	    if (!versionService.isVersioned(actionedUponNodeRef)) {
+	    	Map<String, Serializable> versionProperties = new HashMap<String, Serializable>();
+	    	versionProperties.put(Version.PROP_DESCRIPTION, "OCRd");
+	    	versionProperties.put(VersionModel.PROP_VERSION_TYPE, VersionType.MINOR);
+	    	versionService.createVersion(actionedUponNodeRef, versionProperties);
+	    }
+	    
+	    ContentWriter writeOriginalContent = null;
+	    // Update original PDF file
+	    if (originalMimeType.equals(MimetypeMap.MIMETYPE_PDF)) {
+    	    writeOriginalContent = contentService.getWriter(actionedUponNodeRef, ContentModel.PROP_CONTENT, true);
+	    } else {
+	    	// Create new PDF file
+	    	String fileName = nodeService.getProperty(actionedUponNodeRef, ContentModel.PROP_NAME) + ".pdf";
+	    	Map<QName, Serializable> props = new HashMap<QName, Serializable>(1);
+	        props.put(ContentModel.PROP_NAME, fileName);
+	    	NodeRef pdfNodeRef = createNode(nodeService.getPrimaryParent(actionedUponNodeRef).getParentRef(), fileName, props);
+	    	writeOriginalContent = contentService.getWriter(pdfNodeRef, ContentModel.PROP_CONTENT, true);
+	    	writeOriginalContent.setMimetype(MimetypeMap.MIMETYPE_PDF);
+	    }
+	    writeOriginalContent.putContent(writer.getReader());    	    
+			
+	    // Set OCRd aspect to avoid future re-OCR process
+	    Map<QName, Serializable> aspectProperties = new HashMap<QName, Serializable>();
+	    aspectProperties.put(OCRdModel.PROP_PROCESSED_DATE, new Date());
+		nodeService.addAspect(actionedUponNodeRef, OCRdModel.ASPECT_OCRD, aspectProperties);
+		
+		// Manual versioning because of Alfresco insane rules for first version content nodes
+		versionService.ensureVersioningEnabled(actionedUponNodeRef, null);
+		Map<String, Serializable> versionProperties = new HashMap<String, Serializable>();
+		versionProperties.put(Version.PROP_DESCRIPTION, "OCRd");
+		versionProperties.put(VersionModel.PROP_VERSION_TYPE, VersionType.MINOR);
+    	versionService.createVersion(actionedUponNodeRef, versionProperties);
+		
+	}
+		
 	private NodeRef createNode(NodeRef parentNodeRef, String name, Map<QName, Serializable> props) {
 	    return nodeService.createNode(
 	                parentNodeRef, 
@@ -178,6 +205,10 @@ public class OCRExtractAction extends ActionExecuterAbstractBase {
 
 	public void setVersionService(VersionService versionService) {
 		this.versionService = versionService;
+	}
+
+	public void setTransactionService(TransactionService transactionService) {
+		this.transactionService = transactionService;
 	}
 
 }
