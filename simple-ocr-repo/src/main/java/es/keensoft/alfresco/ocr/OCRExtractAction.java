@@ -27,7 +27,6 @@ import org.alfresco.service.namespace.NamespaceService;
 import org.alfresco.service.namespace.QName;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.springframework.extensions.surf.util.I18NUtil;
 
 import es.keensoft.alfresco.ocr.model.OCRdModel;
 
@@ -69,8 +68,14 @@ public class OCRExtractAction extends ActionExecuterAbstractBase {
     		// Exclude folders and other nodes without content 
     		if (contentData != null) {
     			
-    			Boolean continueOnError = (Boolean)action.getParameterValue(PARAM_CONTINUE_ON_ERROR);
+    			Boolean continueOnError = (Boolean) action.getParameterValue(PARAM_CONTINUE_ON_ERROR);
     		    if (continueOnError == null) continueOnError = true;
+    		    
+    		    // Asynchronous executions throw several "controlled" ConcurrencyFailureException,
+    		    // so no error continuation must be allowed
+    		    if (action.getExecuteAsychronously()) {
+    		    	continueOnError = false;
+    		    }
     		    
     		    try {
     			
