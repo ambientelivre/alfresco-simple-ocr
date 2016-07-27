@@ -1,3 +1,4 @@
+
 Alfresco Simple OCR Action
 ==========================
 
@@ -20,14 +21,16 @@ Supported OCR software:
 * [Windows.Media.OCR](https://www.nuget.org/packages/Microsoft.Windows.Ocr/) as local service
 
 **Languages**
-Currently Share interface is provided in English, Spanish, Brazilian Portuguese and German.
+Currently Share interface is provided in English, Spanish, Brazilian Portuguese, German and Italian.
 OCR supported languages catalog depends directly on selected OCR software ([Tesseract OCR](https://github.com/tesseract-ocr) or [Windows.Media.OCR](https://www.nuget.org/packages/Microsoft.Windows.Ocr/))
 
 ***No original Alfresco resources have been overwritten***
 
+
 BeeCon 2016
 -----------
 This addon was presented a BeeCon 2016. You can find additionals details at [Integrating a simple OCR in Alfresco](http://beecon.buzz/talks/?id=20160125005)
+
 
 Downloading the ready-to-deploy-plugin
 --------------------------------------
@@ -37,12 +40,14 @@ The binary distribution is made of one amp file to be deployed in Alfresco as a 
 
 You can install them by using standard [Alfresco deployment tools](http://docs.alfresco.com/community/tasks/dev-extensions-tutorials-simple-module-install-amp.html) in `alfresco.war`
 
+
 Building the artifacts
 ----------------------
 If you are new to Alfresco and the Alfresco Maven SDK, you should start by reading [Jeff Potts' tutorial on the subject](http://ecmarchitect.com/alfresco-developer-series-tutorials/maven-sdk/tutorial/tutorial.html).
 
 You can build the artifacts from source code using maven
 ```$ mvn clean package```
+
 
 Installation
 ----------------------
@@ -54,6 +59,7 @@ You can find detailed instructions to perform Alfresco installation from scratch
 If you are using Linux and your Alfresco is installed by using [default wizards](http://docs.alfresco.com/community/concepts/simpleinstalls-community-intro.html), you must pay attention to environment execution for programs launched inside your JVM and you must adjust versions and path precedence.
 
 You can find more options to solve this problem at the [FAQ](https://github.com/keensoft/alfresco-simple-ocr/wiki/FAQ) page.
+
 
 Configuration
 ----------------------
@@ -94,6 +100,7 @@ ocr.extra.commands=Spanish
 ocr.server.os=windows
 
 ```
+
 
 Usage
 ----------------------
