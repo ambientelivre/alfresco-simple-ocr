@@ -8,10 +8,10 @@ This addon provides an action to extract OCR text from images or plain PDFs in A
 The plugin is licensed under the [LGPL v3.0](http://www.gnu.org/licenses/lgpl-3.0.html). 
 
 **State**
-Current addon release is 1.0.0
+Current addon release is 1.1.1
 
 **Compatibility**
-The current version has been developed using Alfresco 5.1 and Alfresco SDK 2.1.1, although it should run in Alfresco 5.0.d and Alfresco 5.0.c
+The current version has been developed using Alfresco 5.0 and Alfresco SDK 2.1.1, although it runs also in Alfresco 5.1
 
 Browser compatibility: 100% supported
 
@@ -36,7 +36,7 @@ Downloading the ready-to-deploy-plugin
 --------------------------------------
 The binary distribution is made of one amp file to be deployed in Alfresco as a repo module:
 
-* [repo AMP](https://github.com/keensoft/alfresco-simple-ocr/releases/download/1.0.0/simple-ocr-repo.amp)
+* [repo AMP](https://github.com/keensoft/alfresco-simple-ocr/releases/download/1.1.1/simple-ocr-repo.amp)
 
 You can install them by using standard [Alfresco deployment tools](http://docs.alfresco.com/community/tasks/dev-extensions-tutorials-simple-module-install-amp.html) in `alfresco.war`
 
