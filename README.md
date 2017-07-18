@@ -18,7 +18,7 @@ Browser compatibility: 100% supported
 Supported OCR software:
 * [pdfsandwich](http://www.tobias-elze.de/pdfsandwich/)
 * [OCRmyPDF](https://github.com/jbarlow83/OCRmyPDF)
-* [Windows.Media.OCR](https://www.nuget.org/packages/Microsoft.Windows.Ocr/) as local service
+* [Windows.Media.OCR](https://www.nuget.org/packages/Microsoft.Windows.Ocr/) as local service (we are not providing this software, you have to build it by yourself)
 
 **Languages**
 Currently Share interface is provided in English, Spanish, Brazilian Portuguese, German and Italian.
