@@ -14,3 +14,17 @@ simple-ocr-repo-jar/solr\.log
 simple-ocr-repo-jar/alfresco\.log
 
 simple-ocr-share-jar/share\.log
+
+simple-ocr-share-jar/bin/share\.log
+
+simple-ocr-share-jar/bin/run_hotswap\.sh
+
+simple-ocr-share-jar/bin/\.settings/
+
+simple-ocr-repo-jar/bin/solr\.log
+
+simple-ocr-repo-jar/bin/alfresco\.log
+
+simple-ocr-repo-jar/bin/alf_data_dev/
+
+simple-ocr-repo-jar/bin/\.settings/
