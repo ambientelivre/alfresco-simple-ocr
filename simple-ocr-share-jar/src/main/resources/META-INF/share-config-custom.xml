@@ -2,7 +2,7 @@
 
 	<config evaluator="string-compare" condition="DocumentLibrary">
 		<indicators>
-			<indicator id="indicator.ocr.done" index="1" icon="document-approve" label="ocr.done">
+			<indicator id="indicator.ocr.done" index="1" icon="icon-ocr-16.png" label="ocr.done">
 				<evaluator>evaluator.doclib.ocr.done</evaluator>
 			</indicator>
 		</indicators>
@@ -12,7 +12,7 @@
 		<actions>
 			<action
 				id="simple-ocr-to-file"
-				icon="document-approve"
+				icon="icon-ocr"
 				type="javascript"
 				label="Do OCR to file">
 				<param name="function">onActionWaiting</param>
@@ -42,7 +42,7 @@
 
 	<config evaluator="string-compare" condition="DocLibCustom">
           <dependencies>
-             <js src="resources/simple-ocr-share-jar/js/on-action-waiting.js" />             
+             <js src="components/documentlibrary/js/on-action-waiting.js" />             
           </dependencies>       
     </config>
 
