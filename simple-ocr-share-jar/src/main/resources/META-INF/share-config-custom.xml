@@ -25,6 +25,8 @@
 				
 				<param name="successMessage">ocr.action.success</param>
 	            <param name="failureMessage">ocr.action.error</param>
+	            
+	            <evaluator negate="true">evaluator.doclib.ocr.done</evaluator>
 			</action>
 		</actions>
 	
