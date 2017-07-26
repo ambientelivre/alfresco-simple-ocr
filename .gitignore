@@ -6,3 +6,11 @@ simple-ocr-repo-jar/run_hotswap\.sh
 simple-ocr-repo-jar/\.settings/
 
 simple-ocr-share-jar/\.settings/
+
+simple-ocr-repo-jar/alf_data_dev/
+
+simple-ocr-repo-jar/solr\.log
+
+simple-ocr-repo-jar/alfresco\.log
+
+simple-ocr-share-jar/share\.log

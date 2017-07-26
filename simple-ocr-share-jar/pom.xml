@@ -5,7 +5,7 @@
     <groupId>es.keensoft</groupId>
     <artifactId>simple-ocr-share-jar</artifactId>
     <version>2.0</version>
-    <name>simple-ocr-share-repo Share Jar Module - SDK 3</name>
+    <name>simple-ocr-share-jar Share Jar Module - SDK 3</name>
     <description>Share JAR Module (to be included in the share.war) - SDK 3</description>
     <packaging>jar</packaging>
 
@@ -122,7 +122,7 @@
             </plugin>
 
             <!-- Hot reloading with JRebel -->
-            <!-- <plugin>
+           <!--  <plugin>
                 <groupId>org.zeroturnaround</groupId>
                 <artifactId>jrebel-maven-plugin</artifactId>
                 <version>${jrebel.version}</version>
