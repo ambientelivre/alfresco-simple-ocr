@@ -1,3 +1,4 @@
+
 FROM centos:centos6.8
 MAINTAINER keensoft
 
@@ -5,9 +6,9 @@ RUN set -x \
     && yum -y install wget gcc gcc-c++ make autoconf automake libtool libjpeg-devel libpng-devel libtiff-devel zlib-devel ocaml ImageMagick ImageMagick-devel
 
 RUN set -x \
-    && wget http://www.leptonica.org/source/leptonica-1.72.tar.gz \
-    && tar xvf leptonica-1.72.tar.gz \
-    && cd leptonica-1.72 \
+    && wget http://www.leptonica.org/source/leptonica-1.74.4.tar.gz \
+    && tar xvf leptonica-1.74.4.tar.gz \
+    && cd leptonica-1.74.4 \
     && ./configure \
     && make \
     && make install
