@@ -4,4 +4,22 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans
                 http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
 
+
+    <bean id="simple-ocr-share-jar.resources"
+          class="org.springframework.extensions.surf.util.ResourceBundleBootstrapComponent">
+        <property name="resourceBundles">
+            <list>
+                <value>alfresco.web-extension.messages.simple-ocr-eng</value>
+            </list>
+        </property>
+    </bean>
+    
+   <bean id="evaluator.doclib.ocr.done" parent="evaluator.doclib.action.hasAspect">
+      <property name="aspects">
+         <list>
+            <value>ocr:ocrd</value>
+         </list>
+      </property>
+   </bean>
+
 </beans>

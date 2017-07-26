@@ -1,3 +1,47 @@
 <alfresco-config>
 
+	<config evaluator="string-compare" condition="DocumentLibrary">
+		<indicators>
+			<indicator id="indicator.ocr.done" index="1" icon="document-approve" label="ocr.done">
+				<evaluator>evaluator.doclib.ocr.done</evaluator>
+			</indicator>
+		</indicators>
+	</config>
+
+    <config evaluator="string-compare" condition="DocLibActions"> 
+		<actions>
+			<action
+				id="simple-ocr-to-file"
+				icon="document-approve"
+				type="javascript"
+				label="Do OCR to file">
+				<param name="function">onActionWaiting</param>
+				
+				<permissions>
+					<permission allow="true">Write</permission>
+				</permissions>	
+				
+				<param name="action">ocr-extract</param>
+				
+				<param name="successMessage">ocr.action.success</param>
+	            <param name="failureMessage">ocr.action.error</param>
+			</action>
+		</actions>
+	
+		<actionGroups>
+			<actionGroup id="document-browse">
+				<action index="400" id="simple-ocr-to-file" />
+			</actionGroup>
+			<actionGroup id="document-details">
+				<action index="400" id="simple-ocr-to-file" />
+			</actionGroup>
+		</actionGroups>
+	</config>
+
+	<config evaluator="string-compare" condition="DocLibCustom">
+          <dependencies>
+             <js src="resources/simple-ocr-share-jar/js/on-action-waiting.js" />             
+          </dependencies>       
+    </config>
+
 </alfresco-config>
