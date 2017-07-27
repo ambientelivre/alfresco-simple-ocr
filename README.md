@@ -11,7 +11,7 @@ The plugin is licensed under the [LGPL v3.0](http://www.gnu.org/licenses/lgpl-3.
 Current addon release is 2.0.0
 
 **Compatibility**
-The current version has been developed using Alfresco 5.2 and Alfresco SDK 3.0.2, although it runs also in Alfresco 5.1 and 5.0
+The current version has been developed using Alfresco 5.2 and Alfresco SDK 3.0.2, although it should also run in Alfresco 5.1, 5.0 & 4.2 (as it is developed by using Alfresco SDK 3.0)
 
 Browser compatibility: 100% supported
 
@@ -52,8 +52,7 @@ You can build the artifacts from source code using maven
 
 Installation
 ----------------------
-
-OCR software for Linux depends on programs like `alfresco-pdf-render` or `ImageMagick`, which are also dependencies for Alfresco. In order to avoid problems, it's recommended to install Alfresco from scratch, letting the OS the installation of the packages. 
+OCR software for Linux depends on programs like `gs` or `ImageMagick`, which are also dependencies for Alfresco. In order to avoid problems, it's recommended to install Alfresco from scratch, letting the OS the installation of the packages. 
 
 You can find detailed instructions to perform Alfresco installation from scratch at [Alfresco Documentation](http://docs.alfresco.com/community/tasks/alf-tomcat-install.html).
 
@@ -112,4 +111,4 @@ Usage of rule
 
 Usage of action
 ----------------------
-* Press the action in document browser or document details
+* Press the action **OCR** in document browser or document details

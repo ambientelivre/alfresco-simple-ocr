@@ -68,6 +68,5 @@ pdfsandwich | 0.1.6 | tested by reviewer
 
 ## Suggested tasks
 
-1. Correct license application within project
-2. Provide a detailed (and tested) guide for installation by using Alfresco wizard installer
-3. Include tested versions for 3rd party software (pdfsandwich, ocrmypdf and Windows.Media.OCR)
+1. Provide a detailed (and tested) guide for installation by using Alfresco wizard installer
+2. Include tested versions for 3rd party software (pdfsandwich, ocrmypdf and Windows.Media.OCR)

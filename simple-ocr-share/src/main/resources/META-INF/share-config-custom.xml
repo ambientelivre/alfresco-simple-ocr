@@ -14,7 +14,7 @@
 				id="simple-ocr-to-file"
 				icon="icon-ocr"
 				type="javascript"
-				label="Do OCR to file">
+				label="ocr.action.name">
 				<param name="function">onActionWaiting</param>
 				
 				<permissions>
