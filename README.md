@@ -8,10 +8,10 @@ This addon provides an action to extract OCR text from images or plain PDFs in A
 The plugin is licensed under the [LGPL v3.0](http://www.gnu.org/licenses/lgpl-3.0.html). 
 
 **State**
-Current addon release is 1.1.1
+Current addon release is 2.0.0
 
 **Compatibility**
-The current version has been developed using Alfresco 5.0 and Alfresco SDK 2.1.1, although it runs also in Alfresco 5.1
+The current version has been developed using Alfresco 5.2 and Alfresco SDK 3.0.2, although it runs also in Alfresco 5.1 and 5.0
 
 Browser compatibility: 100% supported
 
@@ -21,7 +21,7 @@ Supported OCR software:
 * [Windows.Media.OCR](https://www.nuget.org/packages/Microsoft.Windows.Ocr/) as local service (we are not providing this software, you have to build it by yourself)
 
 **Languages**
-Currently Share interface is provided in English, Spanish, Brazilian Portuguese, German and Italian.
+Currently Share action interface is provided in English and the behaviour internface in English, Spanish, Brazilian Portuguese, German and Italian.
 OCR supported languages catalog depends directly on selected OCR software ([Tesseract OCR](https://github.com/tesseract-ocr) or [Windows.Media.OCR](https://www.nuget.org/packages/Microsoft.Windows.Ocr/))
 
 ***No original Alfresco resources have been overwritten***
@@ -34,11 +34,12 @@ This addon was presented a BeeCon 2016. You can find additionals details at [Int
 
 Downloading the ready-to-deploy-plugin
 --------------------------------------
-The binary distribution is made of one amp file to be deployed in Alfresco as a repo module:
+The binary distribution is made of two jar files to be deployed in Alfresco as modules:
 
-* [repo AMP](https://github.com/keensoft/alfresco-simple-ocr/releases/download/1.1.1/simple-ocr-repo.amp)
+* [repo JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.0.0/simple-ocr-repo-2.0.jar)
+* [share JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.0.0/simple-ocr-share-2.0.jar)
 
-You can install them by using standard [Alfresco deployment tools](http://docs.alfresco.com/community/tasks/dev-extensions-tutorials-simple-module-install-amp.html) in `alfresco.war`
+You can install them by putting the jar files in [module folder](http://docs.alfresco.com/community/concepts/dev-extensions-packaging-techniques-jar-files.html)
 
 
 Building the artifacts
@@ -52,7 +53,7 @@ You can build the artifacts from source code using maven
 Installation
 ----------------------
 
-OCR software for Linux depends on programs like `gs` or `ImageMagick`, which are also dependencies for Alfresco. In order to avoid problems, it's recommended to install Alfresco from scratch, letting the OS the installation of the packages. 
+OCR software for Linux depends on programs like `alfresco-pdf-render` or `ImageMagick`, which are also dependencies for Alfresco. In order to avoid problems, it's recommended to install Alfresco from scratch, letting the OS the installation of the packages. 
 
 You can find detailed instructions to perform Alfresco installation from scratch at [Alfresco Documentation](http://docs.alfresco.com/community/tasks/alf-tomcat-install.html).
 
@@ -69,7 +70,7 @@ After installation, following properties must be included in **alfresco-global.p
 * If you are using **pdfsandwich**
 
 ```
-ocr.command=/usr/local/bin/pdfsandwich
+ocr.command=/usr/bin/pdfsandwich
 ocr.output.verbose=true
 ocr.output.file.prefix.command=-o
 
@@ -102,9 +103,13 @@ ocr.server.os=windows
 ```
 
 
-Usage
+Usage of rule
 ----------------------
 * Including a rule on a folder by selecting **ocr-extract** action
 * Every dropped image on this folder will be sent to OCR software in order to produce a searchable PDF file. 
 * To perform this operation asynchronously, just use the check provided by Alfresco to configure the rule.
 * To allow Alfresco operating in case of OCR error, set the rule check `Continue on error`
+
+Usage of action
+----------------------
+* Press the action in document browser or document details

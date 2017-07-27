@@ -4,19 +4,20 @@
     <tr>
         <td width="120">Developer:</td>
         <td>Angel Borroy</td>
+        <td>Tiago Simões</td>
         <td colspan="2"></td>
     </tr>
     <tr>
         <td width="120">Release:</td>
-        <td><a href="https://github.com/keensoft/alfresco-simple-ocr/tree/1.1.1">1.1.1</a></td>
+        <td><a href="https://github.com/keensoft/alfresco-simple-ocr/releases/tag/2.0.0">2.0.0</a></td>
         <td width="120">Release date:</td>
-        <td>2016-09-23</td>
+        <td>2017-07-27</td>
     </tr>
     <tr>
         <td width="120">Type:</td>
-        <td>Extension for Repository</td>
+        <td>Extension for Repository and Share</td>
         <td width="120">Packaging:</td>
-        <td>AMP</td>
+        <td>JAR</td>
     </tr>
     <tr>
         <td width="120">Public listing:</td>
@@ -30,9 +31,9 @@
     </tr>
     <tr>
         <td width="120">Reviewer:</td>
-        <td>Angel Borroy</td>
+        <td>Tiago Simões</td>
         <td width="120">Review date:</td>
-        <td>2016-09-23</td>
+        <td>2017-07-27</td>
     </tr>
     <tr>
         <td>Criteria catalog:</td>
@@ -63,11 +64,8 @@ This segments lists all notes regarding compatibility of the addon with Alfresco
 
 Compatible with | Version | Notes
 --- | --- | ---
-Alfresco | Community 5.1.x | tested by reviewer
-Alfresco | Community 5.0.x | tested by reviewer
-pdfsandwich | 0.1.4 | tested by reviewer
-ocrmypdf | 3.2.1 | tested by reviewer
-Windows Server (Window.Media.OCR) | 2012 R2 | tested by reviewer
+Alfresco | Community 5.2.x | tested by reviewer
+pdfsandwich | 0.1.6 | tested by reviewer
 
 ## Suggested tasks
 
