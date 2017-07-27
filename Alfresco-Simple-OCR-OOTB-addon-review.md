@@ -3,8 +3,7 @@
 <table width="100%">
     <tr>
         <td width="120">Developer:</td>
-        <td>Angel Borroy</td>
-        <td>Tiago Simões</td>
+        <td>Angel Borroy<br>Tiago Simões<</td>
         <td colspan="2"></td>
     </tr>
     <tr>
