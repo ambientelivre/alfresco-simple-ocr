@@ -14,12 +14,5 @@
         </property>
     </bean>
     
-   <bean id="evaluator.doclib.ocr.done" parent="evaluator.doclib.action.hasAspect">
-      <property name="aspects">
-         <list>
-            <value>ocr:ocrd</value>
-         </list>
-      </property>
-   </bean>
-
+   <bean id="evaluator.doclib.ocr.done" class="es.keensoft.evaluator.OCREvaluator" />
 </beans>

@@ -65,39 +65,47 @@ public class OCRExtractAction extends ActionExecuterAbstractBase {
 	@Override
 	protected void executeImpl(Action action, NodeRef actionedUponNodeRef) {
 		
-		if (!nodeService.hasAspect(actionedUponNodeRef, OCRdModel.ASPECT_OCRD)) {
+		if (nodeService.hasAspect(actionedUponNodeRef, OCRdModel.ASPECT_OCRD)) {
 			
-    		ContentData contentData = (ContentData) nodeService.getProperty(actionedUponNodeRef, ContentModel.PROP_CONTENT);
-    		
-    		// Exclude folders and other nodes without content 
-    		if (contentData != null) {
-    			
-    			Boolean continueOnError = (Boolean) action.getParameterValue(PARAM_CONTINUE_ON_ERROR);
-    		    if (continueOnError == null) continueOnError = true;
-    		    
-    		    // # 5 Problem writing OCRed file
-    		    // As action.getExecuteAsychronously() returns always FALSE (it's an Alfresco issue):
-    		    // 1 - Try first with new Transaction 
-    		    // 2 - In case of error, try then with the current Transaction
-    		    try {
-    		        executeInNewTransaction(actionedUponNodeRef, contentData);
-    		    } catch (Throwable throwableNewTransaction) {
-    		    	logger.warn(actionedUponNodeRef + ": " + throwableNewTransaction.getMessage());
-    		    	try {
-    		    		// Current transaction
-    		    	    executeImplInternal(actionedUponNodeRef, contentData);
-    		    	} catch (Throwable throwableCurrentTransaction) {
-    		    		if (continueOnError) {
-    	    		    	logger.warn(actionedUponNodeRef + ": " + throwableNewTransaction.getMessage());
-    		    		} else {
-    		    			throw throwableCurrentTransaction;
-    		    		}
-    		    	}
-    		    }
-    		    
-    		}
+			String versionNode = nodeService.getProperty(actionedUponNodeRef, OCRdModel.PROP_APPLIED_VERSION).toString();
+			String versionOCR = versionService.getCurrentVersion(actionedUponNodeRef).getVersionLabel().toString();
 			
+			if(versionNode.equals(versionOCR)) {
+				return ;
+			}
 		}
+			
+		ContentData contentData = (ContentData) nodeService.getProperty(actionedUponNodeRef, ContentModel.PROP_CONTENT);
+		
+		// Exclude folders and other nodes without content 
+		if (contentData != null) {
+			
+			Boolean continueOnError = (Boolean) action.getParameterValue(PARAM_CONTINUE_ON_ERROR);
+		    if (continueOnError == null) continueOnError = true;
+		    
+		    // # 5 Problem writing OCRed file
+		    // As action.getExecuteAsychronously() returns always FALSE (it's an Alfresco issue):
+		    // 1 - Try first with new Transaction 
+		    // 2 - In case of error, try then with the current Transaction
+		    try {
+		        executeInNewTransaction(actionedUponNodeRef, contentData);
+		    } catch (Throwable throwableNewTransaction) {
+		    	logger.warn(actionedUponNodeRef + ": " + throwableNewTransaction.getMessage());
+		    	try {
+		    		// Current transaction
+		    	    executeImplInternal(actionedUponNodeRef, contentData);
+		    	} catch (Throwable throwableCurrentTransaction) {
+		    		if (continueOnError) {
+	    		    	logger.warn(actionedUponNodeRef + ": " + throwableNewTransaction.getMessage());
+		    		} else {
+		    			throw throwableCurrentTransaction;
+		    		}
+		    	}
+		    }
+		    
+		}
+			
+		
         
 	}
 	
@@ -166,11 +174,6 @@ public class OCRExtractAction extends ActionExecuterAbstractBase {
 	    	writeOriginalContent.setMimetype(MimetypeMap.MIMETYPE_PDF);
 	    }
 	    writeOriginalContent.putContent(writer.getReader());    	    
-			
-	    // Set OCRd aspect to avoid future re-OCR process
-	    Map<QName, Serializable> aspectProperties = new HashMap<QName, Serializable>();
-	    aspectProperties.put(OCRdModel.PROP_PROCESSED_DATE, new Date());
-		nodeService.addAspect(actionedUponNodeRef, OCRdModel.ASPECT_OCRD, aspectProperties);
 		
 		// Manual versioning because of Alfresco insane rules for first version content nodes
 		versionService.ensureVersioningEnabled(actionedUponNodeRef, null);
@@ -178,7 +181,12 @@ public class OCRExtractAction extends ActionExecuterAbstractBase {
 		versionProperties.put(Version.PROP_DESCRIPTION, "OCRd");
 		versionProperties.put(VersionModel.PROP_VERSION_TYPE, VersionType.MINOR);
     	versionService.createVersion(actionedUponNodeRef, versionProperties);
-		
+    	
+	    // Set OCRd aspect to avoid future re-OCR process
+	    Map<QName, Serializable> aspectProperties = new HashMap<QName, Serializable>();
+	    aspectProperties.put(OCRdModel.PROP_PROCESSED_DATE, new Date());
+	    aspectProperties.put(OCRdModel.PROP_APPLIED_VERSION, versionService.getCurrentVersion(actionedUponNodeRef).getVersionLabel());
+		nodeService.addAspect(actionedUponNodeRef, OCRdModel.ASPECT_OCRD, aspectProperties);
 	}
 		
 	private NodeRef createNode(NodeRef parentNodeRef, String name, Map<QName, Serializable> props) {

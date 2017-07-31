@@ -3,12 +3,15 @@
     <description>OCR Model</description>
     <author>keensoft</author>
     <version>1.0</version>
+    
     <imports>
         <import uri="http://www.alfresco.org/model/dictionary/1.0" prefix="d" />
     </imports>
+    
     <namespaces>
         <namespace uri="http://www.keensoft.es/model/content/ocr/1.0" prefix="ocr" />
     </namespaces>
+    
     <aspects>
         <aspect name="ocr:ocrd">
             <title>OCRd</title>
@@ -17,7 +20,12 @@
                     <title>OCR process date</title>
                     <type>d:datetime</type>
                 </property>
+                <property name="ocr:versionApplied">
+                	<title>OCR applied version</title>
+                	<type>d:text</type>
+                </property>
             </properties>
         </aspect>
     </aspects>
+    
 </model>

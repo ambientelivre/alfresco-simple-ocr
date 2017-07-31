@@ -6,5 +6,6 @@ public interface OCRdModel {
     static final String URI = "http://www.keensoft.es/model/content/ocr/1.0";
     static final QName ASPECT_OCRD = QName.createQName(URI, "ocrd");
     static final QName PROP_PROCESSED_DATE = QName.createQName(URI, "processedDate");
+    static final QName PROP_APPLIED_VERSION = QName.createQName(URI, "versionApplied");
 }
 

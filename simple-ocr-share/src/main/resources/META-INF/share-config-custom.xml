@@ -1,5 +1,34 @@
 <alfresco-config>
 
+	<aspects>
+		<visible>
+			<aspect name="ocr:ocrd" />
+		</visible>
+		
+		<addable>
+		</addable>
+		
+		<removeable>
+		</removeable>
+	</aspects>
+
+	<config evaluator="aspect" condition="ocr:ocrd">
+		<forms>
+			<form>
+				<field-visibility>
+					<show id="ocr:processedDate" />
+					<show id="ocr:versionApplied" />
+				</field-visibility>
+				
+				<appearance>
+					<set id="ocr-properties" appearance="bordered-panel" label-id="ocr.property.panel" />
+					<field id="ocr:processedDate" label-id="ocr.property.processed.date" set="ocr-properties" />
+					<field id="ocr:versionApplied" label-id="ocr.property.version.applied" set="ocr-properties" />
+				</appearance>
+			</form>
+		</forms>
+	</config>
+
 	<config evaluator="string-compare" condition="DocumentLibrary">
 		<indicators>
 			<indicator id="indicator.ocr.done" index="1" icon="icon-ocr-16.png" label="ocr.done">
