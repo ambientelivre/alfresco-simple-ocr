@@ -112,3 +112,7 @@ Usage of rule
 Usage of action
 ----------------------
 * Press the action **OCR** in document browser or document details
+
+Known issues
+-----------
+* When using WebDAV to upload documents, only **asynchronous** rule execution is allowed
