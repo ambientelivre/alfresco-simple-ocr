@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Arrays;
+import java.util.List;
 
 import org.alfresco.repo.content.transform.ContentTransformerHelper;
 import org.alfresco.repo.content.transform.ContentTransformerWorker;
@@ -24,11 +26,16 @@ public class OCRTransformWorker extends ContentTransformerHelper implements Cont
     
     private boolean verbose = false;
 
+    private static final List<String> sourceMimeTypes =
+            Arrays.asList(new String[] {"application/pdf", "image/bmp", "image/x-portable-anymap", "image/png", "image/jpeg", "image/tiff"});
+
     private static final String VAR_SOURCE = "source";
     private static final String VAR_TARGET = "target";
+
 	public final static String SERVER_OS_LINUX = "linux";
-	public final static String SERVER_OS_WINDOWS = "windows";	
-    
+	public final static String SERVER_OS_WINDOWS = "windows";
+
+
     private RuntimeExec executerLinux;
     private RuntimeExec executerWindows;
     private String serverOS;
@@ -50,8 +57,8 @@ public class OCRTransformWorker extends ContentTransformerHelper implements Cont
 	        reader.getContent(sourceFile);
 	        
 	        String path = sourceFile.getAbsolutePath();
-	        String targetPath = path.substring(0, path.toLowerCase().indexOf(".pdf")) + "_ocr.pdf";
-	        
+	        String targetPath = path.substring(0, path.toLowerCase().lastIndexOf(".")) + "_ocr.pdf";
+
 	        Map<String, String> properties = new HashMap<String, String>(1);
 	
 	        properties.put(VAR_SOURCE, sourceFile.getAbsolutePath());
@@ -89,11 +96,11 @@ public class OCRTransformWorker extends ContentTransformerHelper implements Cont
     		throw new ContentIOException("Failed to recognize the operative system: \n" + serverOS);
     	}
     }
-    
+
 	@Override
     public boolean isTransformable(String sourceMimetype, String targetMimetype, TransformationOptions options) {
 		if (targetMimetype.equals("application/pdf")) {
-			if (sourceMimetype.equals("application/pdf")) {
+			if (sourceMimeTypes.contains(sourceMimetype)) {
 				return true;
 			}
 		}

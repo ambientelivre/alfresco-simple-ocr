@@ -64,49 +64,47 @@ public class OCRExtractAction extends ActionExecuterAbstractBase {
 
 	@Override
 	protected void executeImpl(Action action, NodeRef actionedUponNodeRef) {
-		
-		if (nodeService.hasAspect(actionedUponNodeRef, OCRdModel.ASPECT_OCRD)) {
-			
-			String versionNode = nodeService.getProperty(actionedUponNodeRef, OCRdModel.PROP_APPLIED_VERSION).toString();
-			String versionOCR = versionService.getCurrentVersion(actionedUponNodeRef).getVersionLabel().toString();
-			
-			if(versionNode.equals(versionOCR)) {
-				return ;
-			}
-		}
-			
-		ContentData contentData = (ContentData) nodeService.getProperty(actionedUponNodeRef, ContentModel.PROP_CONTENT);
-		
-		// Exclude folders and other nodes without content 
-		if (contentData != null) {
-			
-			Boolean continueOnError = (Boolean) action.getParameterValue(PARAM_CONTINUE_ON_ERROR);
-		    if (continueOnError == null) continueOnError = true;
-		    
-		    // # 5 Problem writing OCRed file
-		    // As action.getExecuteAsychronously() returns always FALSE (it's an Alfresco issue):
-		    // 1 - Try first with new Transaction 
-		    // 2 - In case of error, try then with the current Transaction
-		    try {
-		        executeInNewTransaction(actionedUponNodeRef, contentData);
-		    } catch (Throwable throwableNewTransaction) {
-		    	logger.warn(actionedUponNodeRef + ": " + throwableNewTransaction.getMessage());
-		    	try {
-		    		// Current transaction
-		    	    executeImplInternal(actionedUponNodeRef, contentData);
-		    	} catch (Throwable throwableCurrentTransaction) {
-		    		if (continueOnError) {
-	    		    	logger.warn(actionedUponNodeRef + ": " + throwableNewTransaction.getMessage());
-		    		} else {
-		    			throw throwableCurrentTransaction;
-		    		}
-		    	}
-		    }
-		    
-		}
-			
-		
-        
+
+        if (nodeService.hasAspect(actionedUponNodeRef, OCRdModel.ASPECT_OCRD)) {
+
+            String versionNode = nodeService.getProperty(actionedUponNodeRef, OCRdModel.PROP_APPLIED_VERSION).toString();
+            String versionOCR = versionService.getCurrentVersion(actionedUponNodeRef).getVersionLabel().toString();
+
+            if (versionNode.equals(versionOCR)) {
+                return;
+            }
+        }
+
+        ContentData contentData = (ContentData) nodeService.getProperty(actionedUponNodeRef, ContentModel.PROP_CONTENT);
+
+        // Exclude folders and other nodes without content
+        if (contentData != null) {
+
+            Boolean continueOnError = (Boolean) action.getParameterValue(PARAM_CONTINUE_ON_ERROR);
+            if (continueOnError == null) continueOnError = true;
+
+            // # 5 Problem writing OCRed file
+            // As action.getExecuteAsychronously() returns always FALSE (it's an Alfresco issue):
+            // 1 - Try first with new Transaction
+            // 2 - In case of error, try then with the current Transaction
+            try {
+                executeInNewTransaction(actionedUponNodeRef, contentData);
+            } catch (Throwable throwableNewTransaction) {
+                logger.warn(actionedUponNodeRef + ": " + throwableNewTransaction.getMessage());
+                try {
+                    // Current transaction
+                    executeImplInternal(actionedUponNodeRef, contentData);
+                } catch (Throwable throwableCurrentTransaction) {
+                    if (continueOnError) {
+                        logger.warn(actionedUponNodeRef + ": " + throwableNewTransaction.getMessage());
+                    } else {
+                        throw throwableCurrentTransaction;
+                    }
+                }
+            }
+
+        }
+
 	}
 	
     // Avoid ConcurrencyFailureException by using RetryingTransactionHelper
@@ -128,22 +126,8 @@ public class OCRExtractAction extends ActionExecuterAbstractBase {
 		String originalMimeType = contentData.getMimetype();                    		
 		
 		ContentReader reader = contentService.getReader(actionedUponNodeRef, ContentModel.PROP_CONTENT);
-		
-		// Non PDF files (such as images)
-		if (!originalMimeType.equals(MimetypeMap.MIMETYPE_PDF)) {
-			
-		    // Try to transform any format to PDF
-	        ContentWriter writer = contentService.getTempWriter();
-	        writer.setMimetype(MimetypeMap.MIMETYPE_PDF);
-		    contentService.transform(reader, writer);
-		    
-		    // Set PDF as content reader
-		    reader = writer.getReader();
-		    
-		}
-		
         ContentWriter writer = contentService.getTempWriter();
-        writer.setMimetype(MimetypeMap.MIMETYPE_PDF);
+        writer.setMimetype(contentData.getMimetype());
 		
 	    try {
 	        ocrTransformWorker.transform(reader, writer, null);

@@ -45,7 +45,7 @@
 				type="javascript"
 				label="ocr.action.name">
 				<param name="function">onActionWaiting</param>
-				
+
 				<permissions>
 					<permission allow="true">Write</permission>
 				</permissions>	
@@ -54,8 +54,11 @@
 				
 				<param name="successMessage">ocr.action.success</param>
 	            <param name="failureMessage">ocr.action.error</param>
-	            
+
+				<param name="continue-on-error">false</param>
+
 	            <evaluator negate="true">evaluator.doclib.ocr.done</evaluator>
+				<evaluator>evaluator.doclib.ocr.mimetype</evaluator>
 			</action>
 		</actions>
 	

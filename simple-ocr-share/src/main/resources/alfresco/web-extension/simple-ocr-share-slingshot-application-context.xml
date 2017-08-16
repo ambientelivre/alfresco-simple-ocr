@@ -15,4 +15,19 @@
     </bean>
     
    <bean id="evaluator.doclib.ocr.done" class="es.keensoft.evaluator.OCREvaluator" />
+
+    <!-- Supported Mime Types for OCR -->
+    <bean id="evaluator.doclib.ocr.mimetype" parent="evaluator.doclib.action.isMimetype">
+        <property name="mimetypes">
+            <list>
+                <value>application/pdf</value>
+                <value>image/bmp</value>
+                <value>image/x-portable-anymap</value>
+                <value>image/png</value>
+                <value>image/jpeg</value>
+                <value>image/tiff</value>
+            </list>
+        </property>
+    </bean>
+
 </beans>
