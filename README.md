@@ -36,8 +36,8 @@ Downloading the ready-to-deploy-plugin
 --------------------------------------
 The binary distribution is made of two jar files to be deployed in Alfresco as modules:
 
-* [repo JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.0.0/simple-ocr-repo-2.0.jar)
-* [share JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.0.0/simple-ocr-share-2.0.jar)
+* [repo JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.2.0/simple-ocr-repo-2.2.0.jar)
+* [share JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.2.0/simple-ocr-share-2.2.0.jar)
 
 You can install them by putting the jar files in [module folder](http://docs.alfresco.com/community/concepts/dev-extensions-packaging-techniques-jar-files.html)
 
