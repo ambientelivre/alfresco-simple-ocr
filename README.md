@@ -8,7 +8,7 @@ This addon provides an action to extract OCR text from images or plain PDFs in A
 The plugin is licensed under the [LGPL v3.0](http://www.gnu.org/licenses/lgpl-3.0.html). 
 
 **State**
-Current addon release is 2.3.0
+Current addon release is 2.3.1
 
 **Compatibility**
 The current version has been developed using Alfresco 5.2 and Alfresco SDK 3.0.2, although it should also run in Alfresco 5.1, 5.0 & 4.2 (as it is developed by using Alfresco SDK 3.0)
@@ -36,8 +36,8 @@ Downloading the ready-to-deploy-plugin
 --------------------------------------
 The binary distribution is made of two jar files to be deployed in Alfresco as modules:
 
-* [repo JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.3.0/simple-ocr-repo-2.3.0.jar)
-* [share JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.3.0/simple-ocr-share-2.3.0.jar)
+* [repo JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.3.1/simple-ocr-repo-2.3.1.jar)
+* [share JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.3.1/simple-ocr-share-2.3.1.jar)
 
 You can install them by putting the jar files in [module folder](http://docs.alfresco.com/community/concepts/dev-extensions-packaging-techniques-jar-files.html)
 

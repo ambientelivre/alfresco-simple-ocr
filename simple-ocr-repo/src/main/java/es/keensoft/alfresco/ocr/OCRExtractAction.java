@@ -12,7 +12,6 @@ import org.alfresco.repo.action.ParameterDefinitionImpl;
 import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
-import org.alfresco.repo.security.authentication.AuthenticationUtil.RunAsWork;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.repo.version.VersionModel;
@@ -102,7 +101,7 @@ public class OCRExtractAction extends ActionExecuterAbstractBase {
             // Share action set asynchronous as mandatory due to variations in response time for OCR processes when server is busy 
             if (forceAsync) {
 
-            	    Runnable runnable = new ExtractOCRTask(actionedUponNodeRef, contentData);
+            	    Runnable runnable = new ExtractOCRTask(actionedUponNodeRef, contentData, AuthenticationUtil.getFullyAuthenticatedUser());
             	    threadPoolExecutor.execute(runnable);
 
             } else {
@@ -136,20 +135,23 @@ public class OCRExtractAction extends ActionExecuterAbstractBase {
         
         private NodeRef nodeToBeOCRd;
         private ContentData contentData;
+        private String userId;
          
-        private ExtractOCRTask(NodeRef nodeToBeOCRd, ContentData contentData) {
+        private ExtractOCRTask(NodeRef nodeToBeOCRd, ContentData contentData, String userId) {
             this.nodeToBeOCRd = nodeToBeOCRd;
             this.contentData = contentData;
+            this.userId = userId;
         }
         
         @Override
         public void run() {
-            AuthenticationUtil.runAsSystem(new RunAsWork<Void>() {
-                public Void doWork() throws Exception {
-                	    executeInNewTransaction(nodeToBeOCRd, contentData); 
-                    return null;
-                }
-            });
+            AuthenticationUtil.pushAuthentication();
+            try {
+        	    AuthenticationUtil.setRunAsUser(userId);
+                executeInNewTransaction(nodeToBeOCRd, contentData); 
+            } finally {
+                AuthenticationUtil.popAuthentication();
+            }            
         }
     }
     
