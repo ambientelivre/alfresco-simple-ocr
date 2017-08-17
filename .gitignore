@@ -2,3 +2,17 @@
 simple-ocr-repo/alf_data_dev/*
 
 simple-ocr-repo/alfresco.log
+
+docker/pdfsandwich-1.4-centos-6.8/test_ocr.pdf
+
+simple-ocr-repo/alfresco.log.2017-06-15
+
+simple-ocr-repo/alfresco.log.2017-08-16
+
+simple-ocr-repo/solr.log.2017-08-16
+
+simple-ocr-share/share.log
+
+simple-ocr-share/share.log.2017-08-16
+
+simple-ocr-repo/solr.log

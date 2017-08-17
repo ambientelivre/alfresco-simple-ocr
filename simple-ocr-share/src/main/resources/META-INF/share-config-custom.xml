@@ -56,6 +56,7 @@
 	            <param name="failureMessage">ocr.action.error</param>
 
 				<param name="continue-on-error">false</param>
+				<param name="asynchronous">true</param>
 
 	            <evaluator negate="true">evaluator.doclib.ocr.done</evaluator>
 				<evaluator>evaluator.doclib.ocr.mimetype</evaluator>

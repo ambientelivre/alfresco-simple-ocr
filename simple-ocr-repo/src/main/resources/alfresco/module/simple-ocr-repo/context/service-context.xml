@@ -10,6 +10,7 @@
         <property name="versionService" ref="VersionService" />
         <property name="transactionService" ref="TransactionService" />
         <property name="ocrTransformWorker" ref="transformer.worker.OCR" />
+		<property name="threadPoolExecutor" ref="defaultAsyncThreadPool" />
     </bean>
     
 	<bean id="transformer.worker.OCR" class="es.keensoft.alfresco.ocr.OCRTransformWorker">
