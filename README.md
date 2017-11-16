@@ -104,7 +104,7 @@ ocr.server.os=windows
 
 Usage of rule
 ----------------------
-* Including a rule on a folder by selecting **ocr-extract** action
+* Including a rule on a folder by selecting **Extract OCR** action
 * Every dropped image on this folder will be sent to OCR software in order to produce a searchable PDF file. 
 * To perform this operation asynchronously, just use the check provided by Alfresco to configure the rule.
 * To allow Alfresco operating in case of OCR error, set the rule check `Continue on error`
