@@ -39,8 +39,12 @@ The binary distribution is made of two jar files to be deployed in Alfresco as m
 * [repo JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.3.1/simple-ocr-repo-2.3.1.jar)
 * [share JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.3.1/simple-ocr-share-2.3.1.jar)
 
-You can install them by putting the jar files in [module folder](http://docs.alfresco.com/community/concepts/dev-extensions-packaging-techniques-jar-files.html)
+You can install them by putting the jar files in [module folder](http://docs.alfresco.com/community/concepts/dev-extensions-packaging-techniques-jar-files.html):
 
+* Copy [repo JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.3.1/simple-ocr-repo-2.3.1.jar) to `/opt/alfresco/modules/platform` (create the directory if it does not exist)
+* Copy [share JAR](https://github.com/keensoft/alfresco-simple-ocr/releases/download/2.3.1/simple-ocr-share-2.3.1.jar) to `/opt/alfresco/modules/share`
+
+Re-start Alfresco after copying the files.
 
 Building the artifacts
 ----------------------
