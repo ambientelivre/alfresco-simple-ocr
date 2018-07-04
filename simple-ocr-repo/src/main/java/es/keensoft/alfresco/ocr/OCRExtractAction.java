@@ -12,6 +12,7 @@ import org.alfresco.repo.action.ParameterDefinitionImpl;
 import org.alfresco.repo.action.executer.ActionExecuterAbstractBase;
 import org.alfresco.repo.content.MimetypeMap;
 import org.alfresco.repo.security.authentication.AuthenticationUtil;
+import org.alfresco.repo.tenant.TenantUtil;
 import org.alfresco.repo.transaction.RetryingTransactionHelper;
 import org.alfresco.repo.transaction.RetryingTransactionHelper.RetryingTransactionCallback;
 import org.alfresco.repo.version.VersionModel;
@@ -147,8 +148,19 @@ public class OCRExtractAction extends ActionExecuterAbstractBase {
         public void run() {
             AuthenticationUtil.pushAuthentication();
             try {
-        	    AuthenticationUtil.setRunAsUser(userId);
-                executeInNewTransaction(nodeToBeOCRd, contentData); 
+                AuthenticationUtil.runAs(new AuthenticationUtil.RunAsWork<Object>() {
+					@Override
+					public Object doWork() throws Exception {
+						return TenantUtil.runAsTenant(new TenantUtil.TenantRunAsWork<Void>()
+			            {
+			                public Void doWork() throws Exception
+			                {
+			                	executeInNewTransaction(nodeToBeOCRd, contentData);
+			                    return null;
+			                }
+			            }, TenantUtil.getCurrentDomain());
+					}
+				} ,userId);
             } finally {
                 AuthenticationUtil.popAuthentication();
             }            
